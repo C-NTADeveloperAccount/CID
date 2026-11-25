@@ -165,17 +165,27 @@ function Dashboard({ individuals, houses, onRefresh }: { individuals: Individual
 
   return <div className="page dashboard-page">
     <header className="page-header"><div><p className="eyebrow">Residential services · Live directory</p><h1>Good morning.</h1><p>A clear view of the people, homes, and services in your care.</p></div><button className="period-button" onClick={onRefresh}><RefreshCw size={16} /> Refresh data</button></header>
-    <section className="metric-grid" aria-label="Overview metrics">
-      <Metric icon={<Building2 />} label="Homes in directory" value={String(houses.length)} trend={`${homeStats.length} with assignments`} />
-      <Metric icon={<Users />} label="Individuals served" value={String(individuals.length)} trend={`${assigned} assigned to homes`} positive />
-      <Metric icon={<CircleDollarSign />} label="Profiled weekly revenue" value={currency.format(revenue)} trend={`${profiled} CID profiles started`} />
-      <Metric icon={<BarChart3 />} label="Average documented age" value={averageAge === null ? '—' : String(averageAge)} suffix={averageAge === null ? undefined : 'years'} trend={`${ages.length} birth dates entered`} />
-    </section>
-    <section className="dashboard-grid">
-      <article className="panel revenue-panel"><div className="panel-heading"><div><span className="panel-kicker">Residential overview</span><h2>{hasRevenue ? 'Weekly revenue by home' : 'Individuals by home'}</h2></div><span className="quiet">Live assignments</span></div><HomeChart homes={homeStats} useRevenue={hasRevenue} /></article>
-      <article className="panel mix-panel"><div className="panel-heading"><div><span className="panel-kicker">People</span><h2>Individuals by county</h2></div></div><CountyChart individuals={individuals} /></article>
-      <article className="panel distribution-panel"><div className="panel-heading"><div><span className="panel-kicker">Support profile</span><h2>Needs group distribution</h2></div><span className="quiet">CID profiles</span></div><Distribution individuals={individuals} field="needsGroup" /></article>
-      <article className="panel distribution-panel"><div className="panel-heading"><div><span className="panel-kicker">Clinical profile</span><h2>Diagnosis code distribution</h2></div><span className="quiet">CID profiles</span></div><Distribution individuals={individuals} field="diagnosisCode" /></article>
+    <section className="dashboard-split" aria-label="Residential and individual overview">
+      <div className="dashboard-column homes-column">
+        <div className="column-heading"><span className="column-icon"><Building2 size={19} /></span><div><span>Residential</span><h2>Houses</h2></div></div>
+        <div className="metric-grid column-metrics">
+          <Metric icon={<Building2 />} label="Homes in directory" value={String(houses.length)} trend={`${homeStats.length} with assignments`} />
+          <Metric icon={<CircleDollarSign />} label="Profiled weekly revenue" value={currency.format(revenue)} trend={`${profiled} CID profiles started`} />
+        </div>
+        <article className="panel revenue-panel"><div className="panel-heading"><div><span className="panel-kicker">Residential overview</span><h2>{hasRevenue ? 'Weekly revenue by home' : 'Individuals by home'}</h2></div><span className="quiet">Live assignments</span></div><HomeChart homes={homeStats} useRevenue={hasRevenue} /></article>
+      </div>
+      <div className="dashboard-column individuals-column">
+        <div className="column-heading"><span className="column-icon"><Users size={19} /></span><div><span>People served</span><h2>Individuals</h2></div></div>
+        <div className="metric-grid column-metrics">
+          <Metric icon={<Users />} label="Individuals served" value={String(individuals.length)} trend={`${assigned} assigned to homes`} positive />
+          <Metric icon={<BarChart3 />} label="Average documented age" value={averageAge === null ? '—' : String(averageAge)} suffix={averageAge === null ? undefined : 'years'} trend={`${ages.length} birth dates entered`} />
+        </div>
+        <div className="individual-panels">
+          <article className="panel mix-panel"><div className="panel-heading"><div><span className="panel-kicker">People</span><h2>Individuals by county</h2></div></div><CountyChart individuals={individuals} /></article>
+          <article className="panel distribution-panel"><div className="panel-heading"><div><span className="panel-kicker">Support profile</span><h2>Needs group distribution</h2></div><span className="quiet">CID profiles</span></div><Distribution individuals={individuals} field="needsGroup" /></article>
+          <article className="panel distribution-panel"><div className="panel-heading"><div><span className="panel-kicker">Clinical profile</span><h2>Diagnosis code distribution</h2></div><span className="quiet">CID profiles</span></div><Distribution individuals={individuals} field="diagnosisCode" /></article>
+        </div>
+      </div>
     </section>
   </div>
 }
